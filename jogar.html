@@ -67,8 +67,8 @@ avancar(
     { texto: "Conversar com o camponês que trabalha na terra", acao: fase1_caminhoA },
     { texto: "Ir direto falar com o senhor feudal", acao: fase1_caminhoB }
   ],
-  "Luke-de-loop/cenario.jpeg",
-  "img.png/download.png"
+  "cenario.jpeg",
+  "download.png"
 );
 
 // ====== IDADE MÉDIA ======
@@ -81,8 +81,8 @@ function fase1_caminhoA() {
       { texto: "O papa", acao: () => { atualizarPontos(-8); fase2(); } },
       { texto: "O senhor feudal", acao: () => { atualizarPontos(5); fase2(); } }
     ],
-    "img.png/fala.png",
-    "img.png/pergunta.png"
+    "fala.png",
+    "pergunta.png"
   );
 }
 
@@ -99,7 +99,7 @@ function fase2() {
       { texto: "Visitar o ateliê de Leonardo da Vinci", acao: faseRenasA },
       { texto: "Ir à biblioteca dos Médici ouvir os humanistas", acao: faseRenasB }
     ],
-    "img.png/fala de um beta.jpeg"
+    "fala de um beta.jpeg"
   );
 }
 
@@ -112,8 +112,8 @@ function faseRenasA() {
       { texto: "Obediência total à Igreja", acao: () => { atualizarPontos(-10); fase3(); } },
       { texto: "Apenas pintar quadros religiosos", acao: () => { atualizarPontos(-5); fase3(); } }
     ],
-    "img.png/leonardo.jpeg",
-    "img.png/pergunta.png"
+    "leonardo.jpeg",
+    "pergunta.png"
   );
 }
 
@@ -126,7 +126,7 @@ function faseRenasB() {
       { texto: "A Igreja ganhou mais poder", acao: () => { atualizarPontos(-10); fase3(); } },
       { texto: "As pessoas pararam de ler", acao: () => { atualizarPontos(-10); fase3(); } }
     ],
-    "img.png/gutemberg.jpeg"
+    "gutemberg.jpeg"
   );
 }
 
@@ -138,7 +138,7 @@ function fase3() {
       { texto: "Aceitar e ouvir sobre o modelo heliocêntrico", acao: faseCienciaA },
       { texto: "Dizer que a Terra é plana e ir embora", acao: faseCienciaB }
     ],
-    "img.png/sistema.jpeg"
+    "sistema.jpeg"
   );
 }
 
@@ -151,8 +151,8 @@ function faseCienciaA() {
       { texto: "Galileu Galilei", acao: () => { atualizarPontos(10); final(); } },
       { texto: "Copérnico", acao: () => { atualizarPontos(5); final(); } }
     ],
-    "img.png/ensinamentos.jpeg",
-    "img.png/pergunta.png"
+    "ensinamentos.jpeg",
+    "pergunta.png"
   );
 }
 
