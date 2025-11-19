@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Aprenda como jogar Loop de Luke: escolha caminhos, mude o final da história!" />
+  <title>Como se Joga | Loop de Luke</title>
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <style>
+    :root {
+      --bg-light: #0a0057;
+      --bg-dark: #0c0558;
+      --text-light: #ffffff;
+      --text-dark: #fff7f7;
+      --primary: #84b7ee;
+      --primary-hover: #0056d2;
+      --primary-active: #0041a3;
+      --transition: 0.3s ease;
+      --transition-fast: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      background: var(--bg-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    body {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    .container {
+      flex: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: var(--primary);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    body.dark h1 {
+      color: #a8d0f5;
+    }
+
+    ol {
+      text-align: left;
+      padding-left: 2rem;
+      font-size: 1.15rem;
+      line-height: 2.2;
+      margin: 0 auto;
+      max-width: 600px;
+      counter-reset: step;
+    }
+
+    li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    li::before {
+      content: counter(step);
+      counter-increment: step;
+      position: absolute;
+      left: -1.8rem;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #700c7e;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(132, 183, 238, 0.3);
+    }
+
+    body.dark li::before {
+      background: #5a9ee0;
+      color: white;
+    }
+
+    li:nth-child(1) { animation-delay: 0.2s; }
+    li:nth-child(2) { animation-delay: 0.3s; }
+    li:nth-child(3) { animation-delay: 0.4s; }
+    li:nth-child(4) { animation-delay: 0.5s; }
+    li:nth-child(5) { animation-delay: 0.6s; }
+
+    li strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    body.dark li strong {
+      color: #a8d0f5;
+    }
+
+    .btn-back {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      padding: 0.9rem 1.6rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-top: 2.5rem;
+      transition: all var(--transition-fast);
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-back::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+      pointer-events: none;
+    }
+
+    .btn-back:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-back:active {
+      transform: translateY(0);
+    }
+
+    .btn-back .icon {
+      width: 1.3rem;
+      height: 1.3rem;
+      transition: transform var(--transition-fast);
+    }
+
+    .btn-back:hover .icon {
+      transform: translateX(-3px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      background: rgba(0,0,0,0.1);
+      font-weight: 300;
+    }
+
+    body.dark footer {
+      background: rgba(255,255,255,0.1);
+      color: #eee;
+    }
+
+    /* Animações */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      animation: fadeUp 0.6s ease 0.1s forwards;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container" role="main">
+    <h1>Como se Joga</h1>
+
+    <ol>
+      <li>Você começa com uma <strong>história</strong>.</li>
+      <li>A cada passo, aparecem <strong>2 escolhas</strong>.</li>
+      <li>Clique na opção que quiser.</li>
+      <li>Sua escolha <strong>muda o final</strong> da história!</li>
+      <li>Tente todos os caminhos para ver <strong>todos os finais</strong>.</li>
+    </ol>
+
+    <div style="text-align: center; margin-top: 35px;">
+      <a href="#" class="btn-back" id="btn-voltar" aria-label="Voltar à página anterior">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M15 19l-7-7 7-7"/>
+        </svg>
+        Voltar
+      </a>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    © <span id="year"></span> Site de História — Feito com carinho.
+  </footer>
+
+  <script>
+    // Atualiza o ano
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Modo escuro
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const toggleDark = (isDark) => document.body.classList.toggle('dark', isDark);
+    toggleDark(prefersDark.matches);
+    prefersDark.addEventListener('change', e => toggleDark(e.matches));
+
+    // Transição de entrada
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // Voltar com segurança
+    const btnVoltar = document.getElementById('btn-voltar');
+    btnVoltar.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = 'index.html';
+        }
+      }, 300);
+    });
+
+    // Suporte a teclado
+    btnVoltar.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btnVoltar.click();
+      }
+    });
+
+    // Garante fade-in ao voltar com back/forward
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) {
+        document.body.style.opacity = '1';
+        document.body.classList.add('loaded');
+      }
+    });
+  </script>
+</body>
+</html>
