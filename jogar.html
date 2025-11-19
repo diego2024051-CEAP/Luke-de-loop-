@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecos do Passado — RPG Educativo</title>
+<style>
+body{margin:0;font-family:'Poppins',sans-serif;background:#111;color:#fff;display:flex;flex-direction:column;align-items:center;padding:20px;}
+h1{color:#bcd4ff;text-align:center;}
+#score{font-size:1.2em;margin:10px;font-weight:bold;}
+#story{max-width:750px;text-align:center;margin:30px;line-height:1.7;font-size:1.1em;}
+.choices{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;margin:30px;}
+button{background:linear-gradient(135deg,#5b9bff,#7a63ff);color:white;border:none;border-radius:20px;padding:12px 24px;font-size:1.1em;cursor:pointer;transition:0.3s;box-shadow:0 0 15px rgba(91,155,255,0.6);}
+button:hover{transform:scale(1.1);background:linear-gradient(135deg,#7ab6ff,#a07aff);}
+#images{display:flex;flex-direction:column;align-items:center;gap:20px;margin:20px;}
+#map-img{max-width:200px;border:4px solid #5b9bff;border-radius:12px;box-shadow:0 0 20px #5b9bff80;}
+#npc-img{max-width:180px;border:3px solid #bcd4ff;border-radius:50%;display:none;box-shadow:0 0 20px #bcd4ff80;}
+footer{color:#88aaff;font-size:0.9em;margin-top:40px;}
+</style>
+</head>
+<body>
+
+<h1>⏳ Luke de Loop — O Mestre do Tempo ⏳</h1>
+<div id="score">Pontuação: 0</div>
+
+<div id="images">
+  <img id="map-img" src="https://i.imgur.com/6QwqJ3W.png" alt="Mapa">
+  <img id="npc-img" src="" alt="NPC">
+</div>
+
+<div id="story"></div>
+<div class="choices" id="choices"></div>
+<footer>© 2025 — Jogo Educativo de História 7º Ano</footer>
+
+<script>
+let score = 0;
+let segredos = 0; // precisa de 4 para o final secreto
+
+const story = document.getElementById("story");
+const choices = document.getElementById("choices");
+const scoreDisplay = document.getElementById("score");
+const mapImg = document.getElementById("map-img");
+const npcImg = document.getElementById("npc-img");
+
+function atualizarPontos(p) { score += p; scoreDisplay.innerText = "Pontuação: " + score; }
+function mostrarNPC(src) { npcImg.src = src; npcImg.style.display = "block"; }
+function esconderNPC() { npcImg.style.display = "none"; }
+
+function avancar(texto, opcoes, map = "", npc = "") {
+  story.innerHTML = texto;
+  choices.innerHTML = "";
+  if(map) mapImg.src = map;
+  if(npc) mostrarNPC(npc); else esconderNPC();
+
+  opcoes.forEach(op => {
+    const btn = document.createElement("button");
+    btn.textContent = op.texto;
+    btn.onclick = op.acao;
+    choices.appendChild(btn);
+  });
+}
+
+// INÍCIO
+avancar(
+  "<strong>Você segura o Relógio do Tempo e é transportado para a Idade Média, ano 1200.</strong><br>Você está diante de um grande castelo feudal.",
+  [
+    { texto: "Conversar com o camponês que trabalha na terra", acao: fase1_caminhoA },
+    { texto: "Ir direto falar com o senhor feudal", acao: fase1_caminhoB }
+  ],
+  "img.png/cenario.jpeg",
+  "img.png/download.png"
+);
+
+// ====== IDADE MÉDIA ======
+function fase1_caminhoA() {
+  atualizarPontos(10);
+  avancar(
+    "O camponês explica a vida dura. Pergunta difícil:<br><strong>No sistema feudal, quem ficava no topo da pirâmide social?</strong>",
+    [
+      { texto: "O rei", acao: () => { atualizarPontos(15); segredos++; fase2(); } },
+      { texto: "O papa", acao: () => { atualizarPontos(-8); fase2(); } },
+      { texto: "O senhor feudal", acao: () => { atualizarPontos(5); fase2(); } }
+    ],
+    "img.png/fala.png",
+    "img.png/pergunta.png"
+  );
+}
+
+function fase1_caminhoB() {
+  atualizarPontos(5);
+  fase2();
+}
+
+// ====== RENASCIMENTO ======
+function fase2() {
+  avancar(
+    "Século XV! Você chega a Florença, coração do Renascimento.<br>Artistas, cientistas e pensadores estão revolucionando o mundo.",
+    [
+      { texto: "Visitar o ateliê de Leonardo da Vinci", acao: faseRenasA },
+      { texto: "Ir à biblioteca dos Médici ouvir os humanistas", acao: faseRenasB }
+    ],
+    "img.png/fala de um beta.jpeg"
+  );
+}
+
+function faseRenasA() {
+  atualizarPontos(10);
+  avancar(
+    "Leonardo mostra seus desenhos anatômicos.<br><strong>Pergunta difícil: Qual era a principal característica do Humanismo renascentista?</strong>",
+    [
+      { texto: "Valorização do ser humano e do conhecimento clássico (Grécia e Roma)", acao: () => { atualizarPontos(20); segredos++; fase3(); } },
+      { texto: "Obediência total à Igreja", acao: () => { atualizarPontos(-10); fase3(); } },
+      { texto: "Apenas pintar quadros religiosos", acao: () => { atualizarPontos(-5); fase3(); } }
+    ],
+    "img.png/leonardo.jpeg",
+    "img.png/pergunta.png"
+  );
+}
+
+function faseRenasB() {
+  atualizarPontos(8);
+  avancar(
+    "Você ouve sobre a invenção da imprensa por Gutenberg.<br><strong>Qual foi a principal consequência da imprensa?</strong>",
+    [
+      { texto: "Difusão mais rápida do conhecimento e ideias", acao: () => { atualizarPontos(15); segredos++; fase3(); } },
+      { texto: "A Igreja ganhou mais poder", acao: () => { atualizarPontos(-10); fase3(); } },
+      { texto: "As pessoas pararam de ler", acao: () => { atualizarPontos(-10); fase3(); } }
+    ],
+    "img.png/gutemberg.jpeg"
+  );
+}
+
+// ====== CIÊNCIA E REFORMA ======
+function fase3() {
+  avancar(
+    "Você chega ao século XVI. A ciência avança e a Igreja é questionada.<br>Um astrônomo te chama para ver o céu.",
+    [
+      { texto: "Aceitar e ouvir sobre o modelo heliocêntrico", acao: faseCienciaA },
+      { texto: "Dizer que a Terra é plana e ir embora", acao: faseCienciaB }
+    ],
+    "img.png/sistema.jpeg"
+  );
+}
+
+function faseCienciaA() {
+  atualizarPontos(10);
+  avancar(
+    "<strong>Pergunta final difícil:</strong><br>Quem foi queimado vivo pela Inquisição por defender que a Terra girava em torno do Sol?",
+    [
+      { texto: "Giordano Bruno", acao: () => { atualizarPontos(25); segredos++; final(); } },
+      { texto: "Galileu Galilei", acao: () => { atualizarPontos(10); final(); } },
+      { texto: "Copérnico", acao: () => { atualizarPontos(5); final(); } }
+    ],
+    "img.png/ensinamentos.jpeg",
+    "img.png/pergunta.png"
+  );
+}
+
+function faseCienciaB() {
+  atualizarPontos(-20);
+  final();
+}
+
+// ====== FINAL ======
+function final() {
+  let titulo = "";
+  let texto = "";
+
+  if (segredos >= 4) {
+    titulo = "⏳ FINAL SECRETO — MESTRE ABSOLUTO DO TEMPO ⏳";
+    texto = "Você respondeu TODAS as perguntas mais difíceis do 7º ano com perfeição!<br>O Relógio do Tempo se abre completamente e concede a você o domínio total sobre as eras!<br><br>Parabéns, verdadeiro gênio da História!";
+  } else if (score >= 80) {
+    titulo = "🌟 FINAL ÉPICO — Herói do Conhecimento 🌟";
+    texto = "Você terminou com uma pontuação altíssima e aprendeu muito!";
+  } else if (score >= 60) {
+    titulo = "🏆 FINAL BOM — Guardião do Passado 🏆";
+    texto = "Você compreendeu bem a História!";
+  } else if (score >= 30) {
+    titulo = "⚖️ FINAL REGULAR — Viajante do Tempo";
+    texto = "Você viajou, mas poderia ter prestado mais atenção...";
+  } else {
+    titulo = "💀 FINAL RUIM — Esquecido pelo Tempo 💀";
+    texto = "A História não perdoa quem não estuda!";
+  }
+
+  story.innerHTML = `<h2>${titulo}</h2><br>${texto}<br><br>Pontuação final: ${score}<br>Segredos desvendados: ${segredos}/4`;
+  choices.innerHTML = `<button onclick="location.reload()" style="font-size:1.3em;padding:15px 30px;">🔁 Jogar Novamente</button>`;
+  esconderNPC();
+}
+</script>
+</body>
+</html>
