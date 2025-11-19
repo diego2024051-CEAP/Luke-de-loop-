@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luke de Loop - História</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #19315f, #01317a);
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.2em;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: 300;
+      margin-bottom: 30px;
+    }
+
+    button {
+      background-color: #1d6d92;
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #22e6e6;
+    }
+
+    .story {
+      display: none;
+      margin-top: 30px;
+      font-size: 1.2em;
+      line-height: 1.6;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Luke de Loop</h1>
+  <h2>Descubra a origem da aventura</h2>
+
+  <button onclick="mostrarHistoria()">📖 Mostrar História</button>
+
+  <div id="historia" class="story">
+    <p>Luke é um garoto de 13 anos, curioso e aventureiro. Certo dia, enquanto explorava o sótão da casa de seus avós, ele encontra um relógio antigo com símbolos misteriosos. Sem entender seu poder, Luke gira os ponteiros e, num piscar de olhos, é transportado para o passado.</p>
+    <p>Agora, preso em uma época desconhecida, ele precisa desvendar os segredos do relógio mágico, enfrentar desafios e encontrar uma forma de voltar para casa. Mas quanto mais ele explora, mais percebe que sua viagem pode mudar o destino do mundo...</p>
+  </div>
+
+  <script>
+    function mostrarHistoria() {
+      document.getElementById('historia').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
