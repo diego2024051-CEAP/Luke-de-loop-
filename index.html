@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Escolha o que ver primeiro no Loop de Luke: História, Ciência, Arte ou Mistério!" />
+  <title>Loop de Luke | Escolha sua Aventura</title>
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Pré-carregamento das próximas fases (opcional) -->
+  <!-- <link rel="prefetch" href="fase-historia.html" as="document"> -->
+
+  <style>
+    :root {
+      --bg-light: #0a0057;
+      --bg-dark: #0c0558;
+      --text-light: #ffffff;
+      --text-dark: #fff7f7;
+      --primary: #4fb5d4;
+      --primary-hover: #0056d2;
+      --primary-active: #0041a3;
+      --transition: 0.3s ease;
+      --transition-fast: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      background: var(--bg-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    body {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    .container {
+      flex: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      animation: fadeUp 0.6s ease 0.1s forwards;
+      opacity: 0;
+    }
+
+    body.dark h2 {
+      color: #a8d0f5;
+    }
+
+    .container p {
+      font-size: 1.15rem;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .container p:nth-of-type(1) { animation-delay: 0.2s; }
+    .tip { animation-delay: 0.3s; font-style: italic; color: #ccc; }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 2rem 0;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.4s forwards;
+    }
+
+    .option {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 1.2rem 1.6rem;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all var(--transition-fast);
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .option::before {
+      content: attr(data-num);
+      position: absolute;
+      left: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      color: #700c7e;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(132, 183, 238, 0.4);
+      transition: transform var(--transition-fast);
+    }
+
+    body.dark .option::before {
+      background: #5a9ee0;
+      color: white;
+    }
+
+    .option:hover::before,
+    .option:focus::before {
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .option .icon {
+      width: 1.4rem;
+      height: 1.4rem;
+      transition: transform var(--transition-fast);
+    }
+
+    .option:hover .icon,
+    .option:focus .icon {
+      transform: translateX(4px);
+    }
+
+    .option:hover,
+    .option:focus {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      outline: none;
+    }
+
+    .option:active {
+      transform: translateY(0);
+    }
+
+    .option .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.6s ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      background: rgba(0,0,0,0.1);
+      font-weight: 300;
+    }
+
+    body.dark footer {
+      background: rgba(255,255,255,0.1);
+      color: #eee;
+    }
+
+    /* Foco visível para acessibilidade */
+    .option:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container menu" role="main">
+    <h2>Bem-vindo(a)!</h2>
+    <p>O que você gostaria de ver primeiro?</p>
+
+    <div class="options" role="menu">
+      <a href="história.html" class="option" data-num="1" role="menuitem" tabindex="0">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 0 20a10 10 0 0 1 0-20zm0 4v6l4 2"/>
+        </svg>
+        <span>História</span>
+      </a>
+
+      <a href="sobre nosso personagem.html" class="option" data-num="2" role="menuitem" tabindex="0">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 1 0 14.14m9.9-14.14l-5.66 5.66m5.66 0l-5.66 5.66"/>
+        </svg>
+        <span>Sobre nosso personagem</span>
+      </a>
+
+      <a href="como se joga.html" class="option" data-num="3" role="menuitem" tabindex="0">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 19.5zM16 8h-3m3 4h-3"/>
+        </svg>
+        <span>Como se joga</span>
+      </a>
+
+      <a href="jogar.html" class="option" data-num="4" role="menuitem" tabindex="0">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3m0 0a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3m0 6v6m-3 3h6"/>
+        </svg>
+        <span>Jogar</span>
+      </a>
+    </div>
+
+    <p class="tip"><em>Digite o número (1-4) ou clique na opção desejada.</em></p>
+  </main>
+
+  <footer role="contentinfo">
+    © <span id="year"></span> Site de História — Feito com carinho.
+  </footer>
+
+  <script>
+    // Atualiza ano
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Modo escuro
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const toggleDark = (isDark) => document.body.classList.toggle('dark', isDark);
+    toggleDark(prefersDark.matches);
+    prefersDark.addEventListener('change', e => toggleDark(e.matches));
+
+    // Transição de entrada
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // Ripple effect
+    document.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+
+        // Navegação com transição
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        document.body.style.opacity = '0';
+        setTimeout(() => { window.location = href; }, 300);
+      });
+
+      // Suporte a teclado (Enter/Espaço)
+      option.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          option.click();
+        }
+      });
+    });
+
+    // Entrada por número (1, 2, 3, 4)
+    document.addEventListener('keydown', (e) => {
+      if (/^[1-4]$/.test(e.key)) {
+        const num = parseInt(e.key);
+        const option = document.querySelector(`.option[data-num="${num}"]`);
+        if (option) {
+          option.focus();
+          setTimeout(() => option.click(), 150);
+        }
+      }
+    });
+
+    // Garante fade-in ao voltar com back/forward
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) {
+        document.body.style.opacity = '1';
+        document.body.classList.add('loaded');
+      }
+    });
+  </script>
+</body>
+</html>
